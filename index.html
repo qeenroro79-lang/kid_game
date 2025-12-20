@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <title>تعليم بذكاء</title>
@@ -7,45 +7,61 @@
 <style>
 body{
   margin:0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg,#1e90ff,#7b2cbf);
+  height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
+  background: linear-gradient(135deg,#1e3c72,#2a5298);
+  font-family: Tahoma, Arial;
 }
 
 .card{
-  background:#f5b642;
-  width:340px;
+  background: linear-gradient(180deg,#f7c56b,#f3b34c);
+  width:320px;
   padding:20px;
   border-radius:20px;
   text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,.3);
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+h1{
+  margin:5px 0;
+  color:#3b2a00;
+}
+
+p{
+  margin-top:0;
+  color:#4b3a00;
 }
 
 button{
   width:100%;
-  margin:10px 0;
-  padding:14px;
+  margin:8px 0;
+  padding:12px;
+  font-size:18px;
   border:none;
-  border-radius:14px;
-  font-size:16px;
-  background:#1f4ed8;
-  color:white;
+  border-radius:12px;
   cursor:pointer;
+  background:#1e4ed8;
+  color:white;
+  transition:0.2s;
 }
 
 button:hover{
-  background:#173aa8;
+  background:#163bb5;
 }
 
-.result{
-  background:white;
-  border-radius:12px;
-  padding:12px;
-  margin-top:12px;
-  min-height:40px;
+.small{
+  font-size:14px;
+  background:#444;
+}
+
+.game{
+  display:none;
+  margin-top:10px;
+  background:#fff;
+  padding:10px;
+  border-radius:10px;
 }
 </style>
 </head>
@@ -53,36 +69,104 @@ button:hover{
 <body>
 
 <div class="card">
-  <h2>تعليم بذكاء 🔍</h2>
+  <h1>تعليم بذكاء 🎈</h1>
   <p>منصة تعليمية تفاعلية للأطفال</p>
 
-  <button onclick="mathGame()">لعبة الحساب ➕</button>
-  <button onclick="lettersGame()">لعبة الحروف 🔤</button>
-  <button onclick="colorsGame()">لعبة الألوان 🎨</button>
-  <button onclick="levelsGame()">المستويات ⭐</button>
+  <button class="small" onclick="toggleSound()">🔊 الصوت</button>
 
-  <div id="result" class="result">اختر لعبة 👆</div>
+  <button onclick="showGame('math')">➕ لعبة الحساب</button>
+  <button onclick="showGame('letters')">🔤 لعبة الحروف</button>
+  <button onclick="showGame('colors')">🎨 لعبة الألوان</button>
+  <button onclick="showGame('levels')">⭐ المستويات</button>
+
+  <!-- الألعاب -->
+
+  <div id="math" class="game">
+    <p id="mathQ"></p>
+    <input id="mathA" type="number">
+    <button onclick="checkMath()">تحقق</button>
+  </div>
+
+  <div id="letters" class="game">
+    <p>اضغطي لسماع الحرف:</p>
+    <button onclick="playLetter()">🔊 حرف</button>
+  </div>
+
+  <div id="colors" class="game">
+    <p id="colorName"></p>
+    <button onclick="nextColor()">التالي</button>
+  </div>
+
+  <div id="levels" class="game">
+    <p>المستوى الحالي:</p>
+    <h2 id="level">1</h2>
+    <button onclick="nextLevel()">التالي</button>
+  </div>
+
+  <p style="font-size:12px;margin-top:10px;">© Rehab Al Hammdi 2026</p>
 </div>
 
+<audio id="clickSound">
+  <source src="https://www.soundjay.com/buttons/sounds/button-3.mp3">
+</audio>
+
 <script>
-function mathGame(){
-  document.getElementById("result").innerHTML =
-  "🧮 2 + 3 = <b>5</b>";
+let soundOn=true;
+let currentLevel=1;
+
+// صوت
+function playSound(){
+  if(soundOn){
+    document.getElementById("clickSound").play();
+  }
 }
 
-function lettersGame(){
-  document.getElementById("result").innerHTML =
-  "🔤 الحرف هو: <b>أ</b>";
+function toggleSound(){
+  soundOn=!soundOn;
+  alert(soundOn ? "🔊 الصوت مفعل" : "🔇 الصوت مكتوم");
 }
 
-function colorsGame(){
-  document.getElementById("result").innerHTML =
-  "🎨 هذا اللون <span style='color:red'>أحمر</span>";
+// إظهار لعبة
+function showGame(id){
+  playSound();
+  document.querySelectorAll(".game").forEach(g=>g.style.display="none");
+  document.getElementById(id).style.display="block";
+  if(id==="math") generateMath();
 }
 
-function levelsGame(){
-  document.getElementById("result").innerHTML =
-  "⭐ المستوى 1 مكتمل!";
+// لعبة الحساب
+let a,b;
+function generateMath(){
+  a=Math.floor(Math.random()*10);
+  b=Math.floor(Math.random()*10);
+  document.getElementById("mathQ").innerText=${a} + ${b} = ؟;
+}
+
+function checkMath(){
+  let ans=document.getElementById("mathA").value;
+  alert(ans==a+b ? "👏 صحيح" : "❌ حاولي مرة أخرى");
+  generateMath();
+}
+
+// لعبة الحروف
+const letters=["أ","ب","ت","ث","ج"];
+function playLetter(){
+  let l=letters[Math.floor(Math.random()*letters.length)];
+  alert("الحرف: "+l);
+}
+
+// لعبة الألوان
+const colors=["أحمر","أزرق","أخضر","أصفر"];
+let ci=0;
+function nextColor(){
+  document.getElementById("colorName").innerText=colors[ci];
+  ci=(ci+1)%colors.length;
+}
+
+// المستويات
+function nextLevel(){
+  currentLevel++;
+  document.getElementById("level").innerText=currentLevel;
 }
 </script>
 
