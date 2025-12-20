@@ -1,102 +1,98 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>تعليم بذكاء | Smart Learning</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kids Game</title>
 <style>
-:root{
-  --bg1:#6a11cb;--bg2:#2575fc;--card:#f7c86b;--btn:#1e3a8a;--white:#fff;
-}
 body{
-  margin:0;font-family:'Tahoma',sans-serif;
-  background:linear-gradient(135deg,var(--bg1),var(--bg2));
-  min-height:100vh;display:flex;align-items:center;justify-content:center;color:#000;
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#6a11cb;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
 }
-.card{
-  background:linear-gradient(180deg,#f9d976,var(--card));
-  width:320px;max-width:92%;padding:20px;border-radius:20px;box-shadow:0 20px 40px rgba(0,0,0,.25);
+.app{
+  background:#f9d976;
+  width:320px;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+  text-align:center;
 }
-header{text-align:center;margin-bottom:10px}
-header h1{margin:0;font-size:26px}
-header small{opacity:.8}
-.btn{
-  width:100%;margin:10px 0;padding:14px;border:none;border-radius:12px;
-  background:var(--btn);color:var(--white);font-size:18px;cursor:pointer;
+h1{margin:0 0 10px}
+button{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  font-size:18px;
+  border:none;
+  border-radius:12px;
+  background:#1e3a8a;
+  color:white;
+  cursor:pointer;
 }
-.btn:hover{opacity:.9}
-.top{display:flex;gap:8px;margin-bottom:10px}
-.small{flex:1;font-size:14px}
-.hidden{display:none}
-.game{background:#fff;border-radius:14px;padding:14px;margin-top:10px;text-align:center}
-.choice{margin:6px;padding:10px;border-radius:10px;background:#e5e7eb;cursor:pointer}
-.choice:hover{background:#dbeafe}
-footer{text-align:center;font-size:12px;opacity:.7;margin-top:8px}
-.lang{font-size:12px}
+#game{background:white;border-radius:12px;padding:12px;margin-top:10px;min-height:80px}
+.choice{background:#e5e7eb;margin:6px;padding:10px;border-radius:8px;cursor:pointer}
+.choice:hover{background:#c7d2fe}
 </style>
 </head>
 <body>
-<div class="card">
-<header>
-  <h1>تعليم بذكاء 🔍</h1>
-  <small>منصة تعليمية تفاعلية للأطفال</small>
-</header>
-<div class="top">
-  <button class="btn small" onclick="toggleSound()">🔊 <span id="soundTxt">الصوت مفعل</span></button>
-  <button class="btn small lang" onclick="toggleLang()">AR / EN</button>
-</div>
 
-<button class="btn" onclick="openGame('math')">➕ لعبة الحساب</button>
-<button class="btn" onclick="openGame('letters')">🔤 لعبة الحروف</button>
-<button class="btn" onclick="openGame('colors')">🎨 لعبة الألوان</button>
-<button class="btn" onclick="openGame('levels')">⭐ المستويات</button>
+<div class="app">
+<h1>🎮 Kids Game</h1>
 
-<div id="gameBox" class="game hidden"></div>
-<footer>© Rehab Al Hammdi 2026 </footer>
+<button onclick="mathGame()">➕ لعبة الحساب</button>
+<button onclick="lettersGame()">🔤 لعبة الحروف</button>
+<button onclick="colorsGame()">🎨 لعبة الألوان</button>
+
+<div id="game">اضغطي على لعبة</div>
 </div>
 
 <script>
-let soundOn=true;let lang='ar';
-const sounds={ok:new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg'),no:new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg')};
-
-function play(s){if(soundOn)sounds[s].play();}
-function toggleSound(){soundOn=!soundOn;document.getElementById('soundTxt').innerText=soundOn?'الصوت مفعل':'الصوت مغلق';}
-function toggleLang(){lang=lang==='ar'?'en':'ar';alert(lang==='ar'?'تم التحويل للعربية':'Switched to English');}
-function openGame(type){
-  const box=document.getElementById('gameBox');box.classList.remove('hidden');
-  if(type==='math')mathGame(box);
-  if(type==='letters')letterGame(box);
-  if(type==='colors')colorGame(box);
-  if(type==='levels')levelGame(box);
+function mathGame(){
+  const a=2,b=3;
+  const game=document.getElementById('game');
+  game.innerHTML=<p>كم ${a}+${b}؟</p>;
+  [4,5,6].forEach(n=>{
+    const d=document.createElement('div');
+    d.className='choice';
+    d.innerText=n;
+    d.onclick=()=>{
+      alert(n===5?'✅ صح شاطرة':'❌ خطأ');
+    };
+    game.appendChild(d);
+  });
 }
 
-function mathGame(box){
-  const a=Math.floor(Math.random()*5)+1,b=Math.floor(Math.random()*5)+1;
-  box.innerHTML=<h3>${lang==='ar'?'كم الناتج؟':'What is the result?'}</h3><p>${a} + ${b}</p>;
-  for(let i=1;i<=4;i++){
-    const ans=(i===1)?a+b:Math.floor(Math.random()*10);
-    const d=document.createElement('div');d.className='choice';d.innerText=ans;
-    d.onclick=()=>{ans===a+b?play('ok'):play('no')};box.appendChild(d);
-  }
+function lettersGame(){
+  const game=document.getElementById('game');
+  game.innerHTML='<p>اختاري حرف A</p>';
+  ['A','B','C'].forEach(l=>{
+    const d=document.createElement('div');
+    d.className='choice';
+    d.innerText=l;
+    d.onclick=()=>{alert(l==='A'?'✅ ممتاز':'❌ جربي ثانية')};
+    game.appendChild(d);
+  });
 }
 
-function letterGame(box){
-  const letters=['A','B','C','D'];const correct=letters[Math.floor(Math.random()*letters.length)];
-  box.innerHTML=<h3>${lang==='ar'?'اختر الحرف الصحيح':'Choose the correct letter'}</h3><p>${correct}</p>;
-  letters.forEach(l=>{const d=document.createElement('div');d.className='choice';d.innerText=l;d.onclick=()=>{l===correct?play('ok'):play('no')};box.appendChild(d);});
-}
-
-function colorGame(box){
-  const colors=[{n:'Red',c:'red'},{n:'Blue',c:'blue'},{n:'Green',c:'green'}];
-  const correct=colors[Math.floor(Math.random()*colors.length)];
-  box.innerHTML=<h3>${lang==='ar'?'اختر اللون':'Choose the color'}</h3><p>${correct.n}</p>;
-  colors.forEach(col=>{const d=document.createElement('div');d.className='choice';d.style.background=col.c;d.innerText=col.n;d.onclick=()=>{col===correct?play('ok'):play('no')};box.appendChild(d);});
-}
-
-function levelGame(box){
-  box.innerHTML=<h3>${lang==='ar'?'المستويات':'Levels'}</h3>;
-  ['Easy','Medium','Hard'].forEach(l=>{const d=document.createElement('div');d.className='choice';d.innerText=l;box.appendChild(d);});
+function colorsGame(){
+  const game=document.getElementById('game');
+  game.innerHTML='<p>اختاري اللون الأحمر</p>';
+  ['red','blue','green'].forEach(c=>{
+    const d=document.createElement('div');
+    d.className='choice';
+    d.style.background=c;
+    d.style.color='white';
+    d.innerText=c;
+    d.onclick=()=>{alert(c==='red'?'🎉 صح':'❌ لا')};
+    game.appendChild(d);
+  });
 }
 </script>
+
 </body>
 </html>
