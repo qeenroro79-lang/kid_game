@@ -1,158 +1,127 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>تعليم بذكاء</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- أيقونة الموقع -->
-  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/616/616408.png" />
+<title>تعليم بذكاء</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Arial', sans-serif;
-    }
+<!-- أيقونة التطبيق -->
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #4b0082, #ffb347);
-    }
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
-    .card {
-      width: 95%;
-      max-width: 420px;
-      background: linear-gradient(180deg, #f7c873, #f0a830);
-      border-radius: 18px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #5f2c82, #49a09d);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  direction: rtl;
+}
 
-    h1 {
-      margin: 5px 0;
-      color: #fff;
-    }
+.container {
+  width: 90%;
+  max-width: 420px;
+  background: linear-gradient(135deg, #f7b733, #fc4a1a);
+  border-radius: 30px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
 
-    .subtitle {
-      color: #fff;
-      font-size: 14px;
-      margin-bottom: 15px;
-    }
+h1 {
+  color: #fff;
+  margin-bottom: 5px;
+}
 
-    .mute {
-      background: #1e3a8a;
-      color: #fff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-bottom: 15px;
-    }
+.subtitle {
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
 
-    .btn {
-      width: 100%;
-      padding: 14px;
-      margin: 10px 0;
-      font-size: 16px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      background: #1e40af;
-      color: #fff;
-    }
+button {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 15px;
+  font-size: 18px;
+  background: #1e3c72;
+  color: #fff;
+  cursor: pointer;
+}
 
-    .btn:hover {
-      background: #1d4ed8;
-    }
+button:active {
+  transform: scale(0.97);
+}
 
-    .game-box {
-      margin-top: 15px;
-      padding: 15px;
-      background: #fff;
-      border-radius: 12px;
-      display: none;
-    }
+.sound-btn {
+  background: #0b5ed7;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
 
-    .letter {
-      font-size: 60px;
-      margin: 10px 0;
-      cursor: pointer;
-    }
-
-    .color-box {
-      width: 80px;
-      height: 80px;
-      margin: 10px auto;
-      border-radius: 12px;
-      cursor: pointer;
-    }
-
-    footer {
-      margin-top: 15px;
-      font-size: 12px;
-      color: #333;
-    }
-  </style>
+.footer {
+  margin-top: 15px;
+  font-size: 12px;
+  color: #eee;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="card">
-    <h1>🎈 تعليم بذكاء</h1>
-    <div class="subtitle">منصة تعليمية تفاعلية للأطفال</div>
+<div class="container">
 
-    <button class="mute" onclick="toggleSound()">🔊 الصوت مفعل</button>
+  <h1>🎈 تعليم بذكاء</h1>
+  <div class="subtitle">منصة تعليمية تفاعلية للأطفال</div>
 
-    <button class="btn" onclick="showMath()">➕ لعبة الحساب</button>
-    <button class="btn" onclick="showLetters()">📘 لعبة الحروف</button>
-    <button class="btn" onclick="showColors()">🎨 لعبة الألوان</button>
-    <button class="btn" onclick="showLevels()">⭐ المستويات</button>
+  <button class="sound-btn" onclick="toggleSound()">🔊 الصوت مفعل</button>
 
-    <!-- الألعاب -->
-    <div id="game" class="game-box"></div>
+  <button onclick="gameMath()">➕ لعبة الحساب</button>
+  <button onclick="gameLetters()">🔤 لعبة الحروف</button>
+  <button onclick="gameColors()">🎨 لعبة الألوان</button>
+  <button onclick="gameLevels()">⭐ المستويات</button>
 
-    <footer>© 2026 Rehab Al hammadi – All Rights Reserved</footer>
+  <div class="footer">
+    © 2026 Rehab Al Hammadi – All Rights Reserved
   </div>
 
-  <script>
-    let soundOn = true;
+</div>
 
-    function toggleSound() {
-      soundOn = !soundOn;
-      document.querySelector('.mute').innerText = soundOn ? '🔊 الصوت مفعل' : '🔇 الصوت مغلق';
-    }
+<script>
+let soundOn = true;
 
-    function playSound() {
-      if (!soundOn) return;
-      const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
-      audio.play();
-    }
+function toggleSound() {
+  soundOn = !soundOn;
+  document.querySelector('.sound-btn').innerText =
+    soundOn ? "🔊 الصوت مفعل" : "🔇 الصوت مغلق";
+}
 
-    function showLetters() {
-      playSound();
-      const letters = ['أ','ب','ت','ث','ج'];
-      const random = letters[Math.floor(Math.random() * letters.length)];
-      document.getElementById('game').style.display = 'block';
-      document.getElementById('game').innerHTML = `
-        <h3>اضغط على الحرف</h3>
-        <div class="letter" onclick="playSound()">${random}</div>
-      `;
-    }
+function gameMath() {
+  alert("🎉 لعبة الحساب شغالة");
+}
 
-    function showColors() {
-      playSound();
-      const colors = ['red','green','blue','orange','purple'];
-      const random = colors[Math.floor(Math.random() * colors.length)];
-      document.getElementById('game').style.display = 'block';
-      document.getElementById('game').innerHTML = `
-        <h3>اضغط على اللون</h3>
-        <div class="color-box" style="background:${random}" onclick="playSound()"></div>
-      `;
-    }
+function gameLetters() {
+  alert("🔤 لعبة الحروف شغالة");
+}
 
-    function showMath() {
-      playSound();
+function gameColors() {
+  alert("🎨 لعبة الألوان شغالة");
+}
+
+function gameLevels() {
+  alert("⭐ المستويات شغالة");
+}
+</script>
+
+</body>
+</html>
