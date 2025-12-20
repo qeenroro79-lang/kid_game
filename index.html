@@ -1,85 +1,148 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>تعليم بذكاء – ألعاب تعليمية للأطفال</title>
+<meta charset="UTF-8">
+<title>تعليم بذكاء – لعبة الأطفال</title>
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#F58220">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f58220">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      direction: rtl;
-      background: linear-gradient(135deg, #260150, #500832);
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 
-    .container {
-      background: #b8860b;
-      max-width: 360px;
-      margin: 60px auto;
-      padding: 25px;
-      border-radius: 18px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    }
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  direction: rtl;
+  background: linear-gradient(135deg, #ffb347, #ffcc33);
+  text-align: center;
+}
 
-    h1 {
-      color: #fff;
-      margin-bottom: 10px;
-    }
+.app {
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
 
-    p {
-      color: #f1f1f1;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
+.card {
+  background: #fff;
+  max-width: 360px;
+  margin: 40px auto;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
 
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      margin: 10px 0;
-      background: #2b0b5e;
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+h1 {
+  color: #f58220;
+  margin-bottom: 10px;
+}
 
-    .btn:hover {
-      background: #3d1480;
-    }
+p {
+  font-size: 14px;
+  color: #555;
+}
 
-    footer {
-      margin-top: 25px;
-      font-size: 13px;
-      color: #eee;
-    }
-  </style>
+.game {
+  font-size: 28px;
+  margin: 20px 0;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  font-size: 18px;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 8px;
+  font-size: 16px;
+  border: none;
+  border-radius: 12px;
+  background: #f58220;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #e06d00;
+}
+
+.result {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+footer {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #777;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="app">
+  <div class="card">
     <h1>🎈 تعليم بذكاء</h1>
-    <p>منصة ألعاب تعليمية عربية للأطفال</p>
+    <p>لعبة حساب ممتعة للأطفال</p>
 
-    <button class="btn">➕ لعبة الحساب</button>
-    <button class="btn">🔤 لعبة الحروف</button>
-    <button class="btn">🎨 لعبة الألوان</button>
-    <button class="btn">⭐ الألغاز والذكاء</button>
+    <div class="game">
+      <span id="num1"></span> + <span id="num2"></span>
+    </div>
+
+    <input type="number" id="answer" placeholder="اكتب الإجابة">
+
+    <button onclick="check()">تحقّق</button>
+    <button onclick="newGame()">🔄 لعبة جديدة</button>
+
+    <div class="result" id="result"></div>
 
     <footer>
-      © 2025 Rehab AL Hammadi – All Rights Reserved
+      © 2026 Rehab Al hammmadi – All Rights Reserved
     </footer>
   </div>
+</div>
+
+<script>
+let a, b;
+
+function newGame() {
+  a = Math.floor(Math.random() * 10);
+  b = Math.floor(Math.random() * 10);
+  document.getElementById("num1").innerText = a;
+  document.getElementById("num2").innerText = b;
+  document.getElementById("answer").value = "";
+  document.getElementById("result").innerText = "";
+}
+
+function check() {
+  let user = document.getElementById("answer").value;
+  let result = document.getElementById("result");
+
+  if (user == a + b) {
+    result.innerText = "🎉 ممتاز! إجابة صحيحة";
+    result.style.color = "green";
+  } else {
+    result.innerText = "❌ حاول مرة ثانية";
+    result.style.color = "red";
+  }
+}
+
+newGame();
+</script>
 
 </body>
 </html>
-
