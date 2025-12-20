@@ -5,59 +5,58 @@
 <title>تعليم بذكاء</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Tahoma, Arial;
-    background: linear-gradient(135deg,#1e90ff,#6a11cb);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    direction: rtl;
+body{
+  margin:0;
+  font-family: Tahoma;
+  background: linear-gradient(135deg,#4facfe,#8f44fd);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  direction:rtl;
 }
 
-.card {
-    background: linear-gradient(180deg,#f9b233,#f39c12);
-    width: 320px;
-    padding: 20px;
-    border-radius: 18px;
-    text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,.3);
+.card{
+  background:#f4a261;
+  padding:25px;
+  border-radius:20px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.3);
 }
 
-.card h1 {
-    margin: 10px 0 5px;
-    color: #fff;
+h1{
+  margin:0;
+  color:white;
 }
 
-.card p {
-    color: #fff;
-    font-size: 14px;
-    margin-bottom: 20px;
+p{
+  color:#fff;
+  margin-bottom:20px;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    font-size: 16px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background: #1e90ff;
-    color: #fff;
-    transition: .3s;
+button{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border:none;
+  border-radius:12px;
+  background:#1e88e5;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
 }
 
-button:hover {
-    background: #0d6efd;
+button:hover{
+  background:#1565c0;
 }
 
-.footer {
-    margin-top: 15px;
-    font-size: 12px;
-    color: #fff;
-    opacity: .8;
+#gameArea{
+  margin-top:15px;
+  background:white;
+  border-radius:12px;
+  padding:15px;
+  min-height:60px;
 }
 </style>
 </head>
@@ -65,53 +64,50 @@ button:hover {
 <body>
 
 <div class="card">
-    <h1>تعليم بذكاء 🔍</h1>
-    <p>منصة تعليمية تفاعلية للأطفال</p>
+  <h1>تعليم بذكاء 🔍</h1>
+  <p>منصة تعليمية تفاعلية للأطفال</p>
 
-    <button onclick="toggleSound()">🔊 الصوت</button>
-    <button onclick="mathGame()">➕ لعبة الحساب</button>
-    <button onclick="lettersGame()">🔤 لعبة الحروف</button>
-    <button onclick="colorsGame()">🎨 لعبة الألوان</button>
-    <button onclick="levelsGame()">⭐ المستويات</button>
+  <button onclick="toggleSound()">🔊 الصوت</button>
+  <button onclick="mathGame()">➕ لعبة الحساب</button>
+  <button onclick="lettersGame()">🔤 لعبة الحروف</button>
+  <button onclick="colorsGame()">🎨 لعبة الألوان</button>
+  <button onclick="levelsGame()">⭐ المستويات</button>
 
-    <div class="footer">
-        Rehab Alhammdi © 2026
-    </div>
+  <div id="gameArea">👆 اختر لعبة</div>
 </div>
 
 <script>
 let soundOn = true;
 
-function toggleSound() {
-    soundOn = !soundOn;
-    alert(soundOn ? "🔊 الصوت شغال" : "🔇 الصوت متوقف");
+function toggleSound(){
+  soundOn = !soundOn;
+  alert(soundOn ? "🔊 الصوت شغال" : "🔇 الصوت متوقف");
 }
 
-function mathGame() {
-    let a = Math.floor(Math.random()*10);
-    let b = Math.floor(Math.random()*10);
-    let answer = prompt(كم ناتج ${a} + ${b} ؟);
-    if (answer == a + b) {
-        alert("👏 إجابة صحيحة");
-    } else {
-        alert("❌ حاول مرة ثانية");
-    }
+function mathGame(){
+  const a = Math.floor(Math.random()*10);
+  const b = Math.floor(Math.random()*10);
+  document.getElementById("gameArea").innerHTML =
+    🧮 كم ناتج <b>${a} + ${b}</b> ؟;
 }
 
-function lettersGame() {
-    const letters = ["أ","ب","ت","ث","ج"];
-    let letter = letters[Math.floor(Math.random()*letters.length)];
-    alert("الحرف هو: " + letter);
+function lettersGame(){
+  const letters = ["أ","ب","ت","ث","ج","ح","خ"];
+  const random = letters[Math.floor(Math.random()*letters.length)];
+  document.getElementById("gameArea").innerHTML =
+    🔤 الحرف هو: <b>${random}</b>;
 }
 
-function colorsGame() {
-    const colors = ["أحمر","أزرق","أخضر","أصفر"];
-    let color = colors[Math.floor(Math.random()*colors.length)];
-    alert("اللون هو: " + color);
+function colorsGame(){
+  const colors = ["أحمر","أزرق","أخضر","أصفر"];
+  const random = colors[Math.floor(Math.random()*colors.length)];
+  document.getElementById("gameArea").innerHTML =
+    🎨 اللون هو: <b>${random}</b>;
 }
 
-function levelsGame() {
-    alert("⭐ المستوى الأول – قريبًا مراحل أكثر");
+function levelsGame(){
+  document.getElementById("gameArea").innerHTML =
+    "⭐ المستوى الحالي: 1";
 }
 </script>
 
