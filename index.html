@@ -4,137 +4,112 @@
 <meta charset="UTF-8">
 <title>تعليم بذكاء</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body {
-  margin: 0;
-  font-family: "Tahoma", sans-serif;
+body{
+  margin:0;
+  font-family: Tahoma;
   background: linear-gradient(135deg,#6a11cb,#2575fc);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
 }
 
-.card {
-  background: linear-gradient(135deg,#f9a826,#fbc02d);
-  width: 320px;
-  border-radius: 20px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,.3);
+.container{
+  width:330px;
+  background: linear-gradient(135deg,#f6a623,#f9d423);
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 15px 30px rgba(0,0,0,.3);
+  text-align:center;
 }
 
-h1 {
-  margin: 5px 0;
-  color: #fff;
+.btn{
+  width:100%;
+  padding:14px;
+  margin:7px 0;
+  border:none;
+  border-radius:12px;
+  background:#1976d2;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
 }
 
-p {
-  color: #fff;
-  font-size: 14px;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 12px;
-  background: #1e88e5;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #1565c0;
-}
-
-.output {
-  margin-top: 10px;
-  background: #fff;
-  border-radius: 10px;
-  padding: 15px;
-  min-height: 80px;
-  font-size: 18px;
-}
-
-.small {
-  font-size: 12px;
-  color: #eee;
-  margin-top: 10px;
+.result{
+  margin-top:12px;
+  background:#fff;
+  border-radius:12px;
+  padding:15px;
+  min-height:90px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
-  <h1>تعليم بذكاء 🔍</h1>
-  <p>منصة تعليمية تفاعلية للأطفال</p>
+<div class="container">
+  <h2>تعليم بذكاء 🔍</h2>
 
-  <button onclick="toggleSound()">🔊 الصوت</button>
-  <button onclick="mathGame()">➕ لعبة الحساب</button>
-  <button onclick="lettersGame()">🔤 لعبة الحروف</button>
-  <button onclick="colorsGame()">🎨 لعبة الألوان</button>
-  <button onclick="levelsGame()">⭐ المستويات</button>
+  <button class="btn" onclick="soundToggle()">🔊 الصوت</button>
+  <button class="btn" onclick="math()">➕ لعبة الحساب</button>
+  <button class="btn" onclick="letter()">🔤 لعبة الحروف</button>
+  <button class="btn" onclick="color()">🎨 لعبة الألوان</button>
+  <button class="btn" onclick="level()">⭐ المستويات</button>
 
-  <div class="output" id="output">👆 اختر لعبة</div>
-
-  <div class="small">Rehab Al-hammadi © 2025</div>
+  <div class="result" id="box">اضغطي زر 👆</div>
 </div>
 
 <script>
-let soundOn = true;
+let sound = false;
 
-function speak(text){
-  if(!soundOn) return;
-  let msg = new SpeechSynthesisUtterance(text);
-  msg.lang = "ar-SA";
-  window.speechSynthesis.speak(msg);
+function speak(t){
+  if(!sound) return;
+  try{
+    let s = new SpeechSynthesisUtterance(t);
+    s.lang = "ar-SA";
+    speechSynthesis.speak(s);
+  }catch(e){}
 }
 
-function toggleSound(){
-  soundOn = !soundOn;
-  speak(soundOn ? "تم تشغيل الصوت" : "تم إيقاف الصوت");
+function soundToggle(){
+  sound = !sound;
+  document.getElementById("box").innerHTML =
+    sound ? "🔊 الصوت شغال" : "🔇 الصوت موقوف";
 }
 
-function mathGame(){
-  let a = Math.floor(Math.random()*10);
-  let b = Math.floor(Math.random()*10);
-  let answer = prompt(كم ناتج ${a} + ${b} ؟);
-  if(answer == a+b){
-    document.getElementById("output").innerHTML = "✅ ممتاز!";
-    speak("أحسنت");
-  } else {
-    document.getElementById("output").innerHTML = "❌ حاول مرة أخرى";
-    speak("حاول مرة أخرى");
-  }
+function math(){
+  let a = Math.floor(Math.random()*5);
+  let b = Math.floor(Math.random()*5);
+  document.getElementById("box").innerHTML =
+    كم ${a} + ${b} ؟;
+  speak("احسبي");
 }
 
-function lettersGame(){
-  const letters = ["أ","ب","ت","ث","ج","ح","خ"];
-  let l = letters[Math.floor(Math.random()*letters.length)];
-  document.getElementById("output").innerHTML = "🔤 الحرف: " + l;
-  speak("هذا هو الحرف " + l);
+function letter(){
+  let arr = ["أ","ب","ت","ث","ج"];
+  let l = arr[Math.floor(Math.random()*arr.length)];
+  document.getElementById("box").innerHTML =
+    الحرف هو <b>${l}</b>;
+  speak(l);
 }
 
-function colorsGame(){
-  const colors = [
-    {name:"أحمر",code:"red"},
-    {name:"أزرق",code:"blue"},
-    {name:"أخضر",code:"green"}
+function color(){
+  let colors = [
+    ["أحمر","red"],
+    ["أزرق","blue"],
+    ["أخضر","green"]
   ];
   let c = colors[Math.floor(Math.random()*colors.length)];
-  document.getElementById("output").innerHTML =
-    <div style="color:${c.code};font-size:22px">🎨 ${c.name}</div>;
-  speak("هذا اللون " + c.name);
+  document.getElementById("box").innerHTML =
+    <span style="color:${c[1]};font-size:22px">${c[0]}</span>;
+  speak(c[0]);
 }
 
-function levelsGame(){
-  document.getElementById("output").innerHTML =
-    "⭐ المستوى 1<br>⭐ المستوى 2<br>⭐ المستوى 3";
-  speak("اختر مستواك");
+function level(){
+  document.getElementById("box").innerHTML =
+    "⭐ مستوى 1<br>⭐ مستوى 2<br>⭐ مستوى 3";
 }
 </script>
 
