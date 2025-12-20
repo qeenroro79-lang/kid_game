@@ -3,123 +3,171 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>تعليم بذكاء</title>
 
-<!-- أيقونة التطبيق -->
-<link rel="icon" href="icon.png">
-<link rel="apple-touch-icon" href="icon.png">
-
 <style>
-* {
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+body{
+  margin:0;
+  font-family: Arial;
+  background: linear-gradient(135deg,#5f2c82,#49a09d);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  direction:rtl;
 }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #5f2c82, #49a09d);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  direction: rtl;
+.card{
+  background: linear-gradient(135deg,#f7b733,#fc4a1a);
+  width:90%;
+  max-width:420px;
+  padding:25px;
+  border-radius:30px;
+  text-align:center;
+  color:white;
+  box-shadow:0 15px 30px rgba(0,0,0,.3);
 }
 
-.container {
-  width: 90%;
-  max-width: 420px;
-  background: linear-gradient(135deg, #f7b733, #fc4a1a);
-  border-radius: 30px;
-  padding: 25px;
-  text-align: center;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+button{
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border:none;
+  border-radius:15px;
+  font-size:18px;
+  background:#1e3c72;
+  color:white;
 }
 
-h1 {
-  color: #fff;
-  margin-bottom: 5px;
+button:active{transform:scale(.97)}
+
+.hidden{display:none}
+
+.box{
+  background:white;
+  color:#333;
+  border-radius:15px;
+  padding:15px;
+  margin-top:10px;
 }
 
-.subtitle {
-  color: #fff;
-  font-size: 14px;
-  margin-bottom: 15px;
-}
-
-button {
-  width: 100%;
-  padding: 15px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 15px;
-  font-size: 18px;
-  background: #1e3c72;
-  color: #fff;
-  cursor: pointer;
-}
-
-button:active {
-  transform: scale(0.97);
-}
-
-.sound-btn {
-  background: #0b5ed7;
-  font-size: 14px;
-  margin-bottom: 15px;
-}
-
-.footer {
-  margin-top: 15px;
-  font-size: 12px;
-  color: #eee;
+.color-box{
+  width:80px;
+  height:80px;
+  border-radius:15px;
+  margin:10px auto;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="card">
 
-  <h1>🎈 تعليم بذكاء</h1>
-  <div class="subtitle">منصة تعليمية تفاعلية للأطفال</div>
+<h2>🎈 تعليم بذكاء</h2>
+<p>مستوى: <span id="level">1</span></p>
 
-  <button class="sound-btn" onclick="toggleSound()">🔊 الصوت مفعل</button>
+<button onclick="show('math')">➕ لعبة الحساب</button>
+<button onclick="show('letters')">🔤 لعبة الحروف</button>
+<button onclick="show('colors')">🎨 لعبة الألوان</button>
+<button onclick="home()">🏠 الرجوع</button>
 
-  <button onclick="gameMath()">➕ لعبة الحساب</button>
-  <button onclick="gameLetters()">🔤 لعبة الحروف</button>
-  <button onclick="gameColors()">🎨 لعبة الألوان</button>
-  <button onclick="gameLevels()">⭐ المستويات</button>
+<!-- لعبة الحساب -->
+<div id="math" class="box hidden">
+  <p id="mathQ"></p>
+  <input id="mathA" type="number">
+  <button onclick="checkMath()">تحقق</button>
+</div>
 
-  <div class="footer">
-    © 2026 Rehab Al Hammadi – All Rights Reserved
-  </div>
+<!-- لعبة الحروف -->
+<div id="letters" class="box hidden">
+  <p id="letterQ"></p>
+  <input id="letterA">
+  <button onclick="checkLetter()">تحقق</button>
+</div>
+
+<!-- لعبة الألوان -->
+<div id="colors" class="box hidden">
+  <div id="colorBox" class="color-box"></div>
+  <p id="colorQ"></p>
+  <button onclick="checkColor('أحمر')">أحمر</button>
+  <button onclick="checkColor('أزرق')">أزرق</button>
+  <button onclick="checkColor('أخضر')">أخضر</button>
+</div>
 
 </div>
 
 <script>
-let soundOn = true;
+let level=1;
+let a,b;
+let letter;
+let color;
 
-function toggleSound() {
-  soundOn = !soundOn;
-  document.querySelector('.sound-btn').innerText =
-    soundOn ? "🔊 الصوت مفعل" : "🔇 الصوت مغلق";
+function speak(text){
+  let msg=new SpeechSynthesisUtterance(text);
+  msg.lang="ar-SA";
+  speechSynthesis.speak(msg);
 }
 
-function gameMath() {
-  alert("🎉 لعبة الحساب شغالة");
+function success(){
+  level++;
+  document.getElementById("level").innerText=level;
+  speak("شاطر ممتاز");
 }
 
-function gameLetters() {
-  alert("🔤 لعبة الحروف شغالة");
+function show(id){
+  home();
+  document.getElementById(id).classList.remove("hidden");
+
+  if(id==="math") newMath();
+  if(id==="letters") newLetter();
+  if(id==="colors") newColor();
 }
 
-function gameColors() {
-  alert("🎨 لعبة الألوان شغالة");
+function home(){
+  document.querySelectorAll(".box").forEach(b=>b.classList.add("hidden"));
 }
 
-function gameLevels() {
-  alert("⭐ المستويات شغالة");
+/* الحساب */
+function newMath(){
+  a=Math.floor(Math.random()*10);
+  b=Math.floor(Math.random()*10);
+  document.getElementById("mathQ").innerText=${a} + ${b} = ؟;
+}
+function checkMath(){
+  if(Number(mathA.value)===a+b){
+    success(); newMath();
+  } else speak("حاول مرة ثانية");
+}
+
+/* الحروف */
+function newLetter(){
+  const letters=["أ","ب","ت","ث","ج"];
+  letter=letters[Math.floor(Math.random()*letters.length)];
+  document.getElementById("letterQ").innerText=اكتب الحرف: ${letter};
+}
+function checkLetter(){
+  if(letterA.value===letter){
+    success(); newLetter();
+  } else speak("غلط");
+}
+
+/* الألوان */
+function newColor(){
+  const colors=[
+    {n:"أحمر",c:"red"},
+    {n:"أزرق",c:"blue"},
+    {n:"أخضر",c:"green"}
+  ];
+  let r=colors[Math.floor(Math.random()*3)];
+  color=r.n;
+  document.getElementById("colorBox").style.background=r.c;
+  document.getElementById("colorQ").innerText="اختر اللون الصحيح";
+}
+function checkColor(c){
+  if(c===color){
+    success(); newColor();
+  } else speak("خطأ");
 }
 </script>
 
