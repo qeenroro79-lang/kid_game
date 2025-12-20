@@ -1,112 +1,158 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تعليم بذكاء</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#5f3dc4">
-<style>
-body{
- margin:0;min-height:100vh;font-family:Arial;direction:rtl;
- background:linear-gradient(135deg,#5f3dc4,#9c36b5);
- display:flex;justify-content:center;align-items:center;
-}
-.container{
- background:linear-gradient(135deg,#f59f00,#fcc419);
- width:100%;max-width:420px;padding:20px;border-radius:20px;
- text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.3)
-}
-h1{color:#fff;margin:5px}
-.subtitle{color:#fff;font-size:14px;margin-bottom:15px}
-button{
- width:100%;padding:15px;margin:8px 0;font-size:18px;
- border:none;border-radius:12px;background:#364fc7;color:#fff
-}
-.hidden{display:none}
-.game-box{
- background:#fff;border-radius:15px;padding:15px;margin-top:10px
-}
-.letter,.color-box{
- font-size:60px;padding:30px;border-radius:15px;margin:10px auto;
-}
-.color-box{height:120px}
-.footer{font-size:12px;color:#eee;margin-top:10px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تعليم بذكاء</title>
+
+  <!-- أيقونة الموقع -->
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/616/616408.png" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #4b0082, #ffb347);
+    }
+
+    .card {
+      width: 95%;
+      max-width: 420px;
+      background: linear-gradient(180deg, #f7c873, #f0a830);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      margin: 5px 0;
+      color: #fff;
+    }
+
+    .subtitle {
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .mute {
+      background: #1e3a8a;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background: #1e40af;
+      color: #fff;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+    }
+
+    .game-box {
+      margin-top: 15px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .letter {
+      font-size: 60px;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+
+    .color-box {
+      width: 80px;
+      height: 80px;
+      margin: 10px auto;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    footer {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container" id="menu">
- <h1>🎈 تعليم بذكاء</h1>
- <div class="subtitle">منصة تعليمية تفاعلية للأطفال</div>
- <button onclick="startLetters()">🆎 لعبة الحروف</button>
- <button onclick="startColors()">🎨 لعبة الألوان</button>
- <div class="footer">© 2026 Rehab Al hammadi</div>
-</div>
+  <div class="card">
+    <h1>🎈 تعليم بذكاء</h1>
+    <div class="subtitle">منصة تعليمية تفاعلية للأطفال</div>
 
-<div class="container hidden" id="lettersGame">
- <h1>🆎 لعبة الحروف</h1>
- <div class="game-box">
-   <div class="letter" id="letter">أ</div>
-   <button onclick="nextLetter()">التالي</button>
- </div>
- <button onclick="backMenu()">⬅ رجوع</button>
-</div>
+    <button class="mute" onclick="toggleSound()">🔊 الصوت مفعل</button>
 
-<div class="container hidden" id="colorsGame">
- <h1>🎨 لعبة الألوان</h1>
- <div class="game-box">
-   <div class="color-box" id="colorBox"></div>
-   <div id="colorName"></div>
-   <button onclick="nextColor()">التالي</button>
- </div>
- <button onclick="backMenu()">⬅ رجوع</button>
-</div>
+    <button class="btn" onclick="showMath()">➕ لعبة الحساب</button>
+    <button class="btn" onclick="showLetters()">📘 لعبة الحروف</button>
+    <button class="btn" onclick="showColors()">🎨 لعبة الألوان</button>
+    <button class="btn" onclick="showLevels()">⭐ المستويات</button>
 
-<audio id="sound"></audio>
+    <!-- الألعاب -->
+    <div id="game" class="game-box"></div>
 
-<script>
-const letters=['أ','ب','ت','ث','ج','ح','خ','د','ذ','ر'];
-let letterIndex=0;
-const colors=[
- {name:'أحمر',value:'red',sound:'red'},
- {name:'أزرق',value:'blue',sound:'blue'},
- {name:'أصفر',value:'yellow',sound:'yellow'},
- {name:'أخضر',value:'green',sound:'green'}
-];
-let colorIndex=0;
+    <footer>© 2026 Rehab Al hammadi – All Rights Reserved</footer>
+  </div>
 
-function playSound(text){
- const utter=new SpeechSynthesisUtterance(text);
- utter.lang='ar-SA';speechSynthesis.speak(utter);
-}
+  <script>
+    let soundOn = true;
 
-function startLetters(){
- menu.classList.add('hidden');lettersGame.classList.remove('hidden');
- playSound(letters[letterIndex]);
-}
-function nextLetter(){
- letterIndex=(letterIndex+1)%letters.length;
- letter.innerText=letters[letterIndex];playSound(letters[letterIndex]);
-}
+    function toggleSound() {
+      soundOn = !soundOn;
+      document.querySelector('.mute').innerText = soundOn ? '🔊 الصوت مفعل' : '🔇 الصوت مغلق';
+    }
 
-function startColors(){
- menu.classList.add('hidden');colorsGame.classList.remove('hidden');
- showColor();
-}
-function showColor(){
- colorBox.style.background=colors[colorIndex].value;
- colorName.innerText=colors[colorIndex].name;
- playSound(colors[colorIndex].name);
-}
-function nextColor(){
- colorIndex=(colorIndex+1)%colors.length;showColor();
-}
+    function playSound() {
+      if (!soundOn) return;
+      const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
+      audio.play();
+    }
 
-function backMenu(){
- lettersGame.classList.add('hidden');colorsGame.classList.add('hidden');
- menu.classList.remove('hidden');
-}
-</script>
-</body>
-</html>
+    function showLetters() {
+      playSound();
+      const letters = ['أ','ب','ت','ث','ج'];
+      const random = letters[Math.floor(Math.random() * letters.length)];
+      document.getElementById('game').style.display = 'block';
+      document.getElementById('game').innerHTML = `
+        <h3>اضغط على الحرف</h3>
+        <div class="letter" onclick="playSound()">${random}</div>
+      `;
+    }
+
+    function showColors() {
+      playSound();
+      const colors = ['red','green','blue','orange','purple'];
+      const random = colors[Math.floor(Math.random() * colors.length)];
+      document.getElementById('game').style.display = 'block';
+      document.getElementById('game').innerHTML = `
+        <h3>اضغط على اللون</h3>
+        <div class="color-box" style="background:${random}" onclick="playSound()"></div>
+      `;
+    }
+
+    function showMath() {
+      playSound();
