@@ -3,241 +3,110 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kids Play</title>
-
+<title>تعليم بذكاء</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5f3dc4">
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #fef6e4;
-    direction: rtl;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+body{
+ margin:0;min-height:100vh;font-family:Arial;direction:rtl;
+ background:linear-gradient(135deg,#5f3dc4,#9c36b5);
+ display:flex;justify-content:center;align-items:center;
 }
-
-.app {
-    background: white;
-    width: 95%;
-    max-width: 420px;
-    border-radius: 20px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+.container{
+ background:linear-gradient(135deg,#f59f00,#fcc419);
+ width:100%;max-width:420px;padding:20px;border-radius:20px;
+ text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.3)
 }
-
-h1 {
-    color: #f58220;
+h1{color:#fff;margin:5px}
+.subtitle{color:#fff;font-size:14px;margin-bottom:15px}
+button{
+ width:100%;padding:15px;margin:8px 0;font-size:18px;
+ border:none;border-radius:12px;background:#364fc7;color:#fff
 }
-
-button {
-    width: 100%;
-    padding: 14px;
-    margin: 7px 0;
-    font-size: 18px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    background: #2f8f6b;
-    color: white;
+.hidden{display:none}
+.game-box{
+ background:#fff;border-radius:15px;padding:15px;margin-top:10px
 }
-
-.secondary {
-    background: #f58220;
+.letter,.color-box{
+ font-size:60px;padding:30px;border-radius:15px;margin:10px auto;
 }
-
-.back {
-    background: #999;
-}
-
-.game, .levels {
-    display: none;
-}
-
-.big {
-    font-size: 70px;
-    margin: 20px 0;
-}
-
-.options button {
-    background: #ffd166;
-    color: #333;
-}
-
-.result {
-    margin-top: 10px;
-    font-size: 18px;
-}
-
-.color-box {
-    width: 100%;
-    height: 120px;
-    border-radius: 12px;
-    margin: 15px 0;
-}
+.color-box{height:120px}
+.footer{font-size:12px;color:#eee;margin-top:10px}
 </style>
 </head>
-
 <body>
 
-<div class="app">
-    <h1>🎈 Kids Play</h1>
-
-    <!-- القائمة الرئيسية -->
-    <div id="menu">
-        <button onclick="chooseGame('letters')">🔤 لعبة الحروف</button>
-        <button onclick="chooseGame('colors')">🎨 لعبة الألوان</button>
-    </div>
-
-    <!-- اختيار المستوى -->
-    <div class="levels" id="levels">
-        <h2>اختر المستوى</h2>
-        <button onclick="setLevel('easy')">⭐ سهل</button>
-        <button onclick="setLevel('medium')">⭐⭐ متوسط</button>
-        <button class="back" onclick="backMenu()">رجوع</button>
-    </div>
-
-    <!-- لعبة الحروف -->
-    <div class="game" id="lettersGame">
-        <h2>لعبة الحروف</h2>
-        <div class="big" id="letter"></div>
-
-        <div class="options">
-            <button onclick="checkLetter(this)"></button>
-            <button onclick="checkLetter(this)"></button>
-            <button onclick="checkLetter(this)"></button>
-        </div>
-
-        <div class="result" id="letterResult"></div>
-        <button class="back" onclick="backMenu()">رجوع</button>
-    </div>
-
-    <!-- لعبة الألوان -->
-    <div class="game" id="colorsGame">
-        <h2>لعبة الألوان</h2>
-        <div class="color-box" id="colorBox"></div>
-
-        <div class="options">
-            <button onclick="checkColor(this)"></button>
-            <button onclick="checkColor(this)"></button>
-            <button onclick="checkColor(this)"></button>
-        </div>
-
-        <div class="result" id="colorResult"></div>
-        <button class="back" onclick="backMenu()">رجوع</button>
-    </div>
-
-    <footer style="margin-top:15px; font-size:14px; color:#666;">
-        © 2026 Rehab Al hammadi – All Rights Reserved
-    </footer>
+<div class="container" id="menu">
+ <h1>🎈 تعليم بذكاء</h1>
+ <div class="subtitle">منصة تعليمية تفاعلية للأطفال</div>
+ <button onclick="startLetters()">🆎 لعبة الحروف</button>
+ <button onclick="startColors()">🎨 لعبة الألوان</button>
+ <div class="footer">© 2026 Rehab Al hammadi</div>
 </div>
 
+<div class="container hidden" id="lettersGame">
+ <h1>🆎 لعبة الحروف</h1>
+ <div class="game-box">
+   <div class="letter" id="letter">أ</div>
+   <button onclick="nextLetter()">التالي</button>
+ </div>
+ <button onclick="backMenu()">⬅ رجوع</button>
+</div>
+
+<div class="container hidden" id="colorsGame">
+ <h1>🎨 لعبة الألوان</h1>
+ <div class="game-box">
+   <div class="color-box" id="colorBox"></div>
+   <div id="colorName"></div>
+   <button onclick="nextColor()">التالي</button>
+ </div>
+ <button onclick="backMenu()">⬅ رجوع</button>
+</div>
+
+<audio id="sound"></audio>
+
 <script>
-let currentGame = "";
-let level = "easy";
-
-/* ===== القوائم ===== */
-function backMenu() {
-    document.getElementById("menu").style.display = "block";
-    document.getElementById("levels").style.display = "none";
-    document.getElementById("lettersGame").style.display = "none";
-    document.getElementById("colorsGame").style.display = "none";
-}
-
-function chooseGame(game) {
-    currentGame = game;
-    document.getElementById("menu").style.display = "none";
-    document.getElementById("levels").style.display = "block";
-}
-
-function setLevel(lv) {
-    level = lv;
-    document.getElementById("levels").style.display = "none";
-    if (currentGame === "letters") openLetters();
-    if (currentGame === "colors") openColors();
-}
-
-/* ===== لعبة الحروف ===== */
-let lettersEasy = ["A","B","C","D"];
-let lettersMedium = ["A","B","C","D","E","F","G","H"];
-let correctLetter = "";
-
-function openLetters() {
-    document.getElementById("lettersGame").style.display = "block";
-    newLetter();
-}
-
-function newLetter() {
-    let list = level === "easy" ? lettersEasy : lettersMedium;
-    correctLetter = list[Math.floor(Math.random() * list.length)];
-    document.getElementById("letter").innerText = correctLetter;
-    document.getElementById("letterResult").innerText = "";
-
-    let buttons = document.querySelectorAll("#lettersGame .options button");
-    let shuffled = [...list].sort(() => Math.random() - 0.5);
-
-    buttons.forEach((btn, i) => {
-        btn.innerText = shuffled[i];
-    });
-}
-
-function checkLetter(btn) {
-    if (btn.innerText === correctLetter) {
-        document.getElementById("letterResult").innerText = "🎉 صح!";
-        newLetter();
-    } else {
-        document.getElementById("letterResult").innerText = "❌ حاول مرة ثانية";
-    }
-}
-
-/* ===== لعبة الألوان ===== */
-let colorsEasy = [
-    {name:"أحمر",value:"red"},
-    {name:"أزرق",value:"blue"},
-    {name:"أخضر",value:"green"}
+const letters=['أ','ب','ت','ث','ج','ح','خ','د','ذ','ر'];
+let letterIndex=0;
+const colors=[
+ {name:'أحمر',value:'red',sound:'red'},
+ {name:'أزرق',value:'blue',sound:'blue'},
+ {name:'أصفر',value:'yellow',sound:'yellow'},
+ {name:'أخضر',value:'green',sound:'green'}
 ];
+let colorIndex=0;
 
-let colorsMedium = [
-    {name:"أحمر",value:"red"},
-    {name:"أزرق",value:"blue"},
-    {name:"أخضر",value:"green"},
-    {name:"أصفر",value:"yellow"},
-    {name:"بنفسجي",value:"purple"}
-];
-
-let correctColor = "";
-
-function openColors() {
-    document.getElementById("colorsGame").style.display = "block";
-    newColor();
+function playSound(text){
+ const utter=new SpeechSynthesisUtterance(text);
+ utter.lang='ar-SA';speechSynthesis.speak(utter);
 }
 
-function newColor() {
-    let list = level === "easy" ? colorsEasy : colorsMedium;
-    let pick = list[Math.floor(Math.random() * list.length)];
-    correctColor = pick.name;
-
-    document.getElementById("colorBox").style.background = pick.value;
-    document.getElementById("colorResult").innerText = "";
-
-    let buttons = document.querySelectorAll("#colorsGame .options button");
-    let shuffled = [...list].sort(() => Math.random() - 0.5);
-
-    buttons.forEach((btn, i) => {
-        btn.innerText = shuffled[i].name;
-    });
+function startLetters(){
+ menu.classList.add('hidden');lettersGame.classList.remove('hidden');
+ playSound(letters[letterIndex]);
+}
+function nextLetter(){
+ letterIndex=(letterIndex+1)%letters.length;
+ letter.innerText=letters[letterIndex];playSound(letters[letterIndex]);
 }
 
-function checkColor(btn) {
-    if (btn.innerText === correctColor) {
-        document.getElementById("colorResult").innerText = "🎉 ممتاز!";
-        newColor();
-    } else {
-        document.getElementById("colorResult").innerText = "❌ جرّب مرة ثانية";
-    }
+function startColors(){
+ menu.classList.add('hidden');colorsGame.classList.remove('hidden');
+ showColor();
+}
+function showColor(){
+ colorBox.style.background=colors[colorIndex].value;
+ colorName.innerText=colors[colorIndex].name;
+ playSound(colors[colorIndex].name);
+}
+function nextColor(){
+ colorIndex=(colorIndex+1)%colors.length;showColor();
+}
+
+function backMenu(){
+ lettersGame.classList.add('hidden');colorsGame.classList.add('hidden');
+ menu.classList.remove('hidden');
 }
 </script>
-
 </body>
 </html>
