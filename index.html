@@ -1,151 +1,145 @@
-<!DOCTYPE html>
+[2:26 م، 2025/12/20] عاشقة الهدوء😴❤️: <!DOCTYPE html>
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kids Math Game</title>
 
-<!-- أيقونة الموقع / التطبيق -->
-<link rel="icon" type="image/svg+xml"
-href="data:image/svg+xml,
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
-<rect width='100' height='100' rx='20' fill='%23f58220'/>
-<text x='50' y='65' font-size='55' text-anchor='middle' fill='white'>➕</text>
-</svg>">
+<title>تعليم بذكاء</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5f8220">
 
 <style>
-body {
+body{
+    margin:0;
     font-family: Arial, sans-serif;
-    direction: rtl;
-    background: linear-gradient(135deg, #fef6e4, #fdebd0);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+    background:#ffffff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    direction:rtl;
 }
 
-.game {
-    background: white;
-    padding: 25px;
-    border-radius: 20px;
-    text-align: center;
-    width: 330px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+.card{
+    background:#b8860b;
+    width:90%;
+    max-width:380px;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+    text-align:center;
 }
 
-h2 {
-    color: #f58220;
-    margin-bottom: 5px;
+h1{
+    margin:0;
+    color:#fff;
 }
 
-p {
-    color: #555;
-    font-size: 14px;
+.subtitle{
+    color:#f5f5f5;
+    font-size:14px;
+    margin:10px 0 20px;
 }
 
-.numbers {
-    font-size: 36px;
-    margin: 20px 0;
-    color: #2f8f6b;
-    font-weight: bold;
+button{
+    width:100%;
+    padding:14px;
+    margin:8px 0;
+    font-size:16px;
+    border:none;
+    border-radius:12px;
+    background:#2d1457;
+    color:#fff;
+    cursor:pointer;
 }
 
-input {
-    width: 100%;
-    padding: 12px;
-    font-size: 18px;
-    text-align: center;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    margin-bottom: 12px;
+button:active{
+    transform:scale(0.97);
 }
 
-button {
-    background: #2f8f6b;
-    color: white;
-    border: none;
-    padding: 12px;
-    width: 100%;
-    font-size: 18px;
-    border-radius: 12px;
-    cursor: pointer;
-    margin-top: 8px;
+.game{
+    display:none;
+    margin-top:15px;
+    background:#fff;
+    border-radius:12px;
+    padding:15px;
 }
 
-button:hover {
-    background: #267a5b;
+input{
+    width:80%;
+    padding:10px;
+    font-size:18px;
+    text-align:center;
+    margin-top:10px;
 }
 
-.result {
-    margin-top: 15px;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-footer {
-    margin-top: 15px;
-    font-size: 13px;
-    color: #777;
+.footer{
+    margin-top:15px;
+    font-size:13px;
+    color:#eee;
 }
 </style>
 </head>
 
 <body>
 
-<div class="game">
-    <h2>🎯 لعبة الجمع للأطفال</h2>
-    <p>تعلّم الحساب بطريقة ممتعة ⭐</p>
+<div class="card">
 
-    <div class="numbers">
-        <span id="num1"></span> + <span id="num2"></span>
+    <h1>🎈 تعليم بذكاء</h1>
+    <div class="subtitle">منصة تعليمية تفاعلية للأطفال</div>
+
+    <button onclick="showMath()">➕ لعبة الحساب</button>
+    <button onclick="alert('قريبًا 🚧')">📘 لعبة الحروف</button>
+    <button onclick="alert('قريبًا 🎨')">🎨 لعبة الألوان</button>
+    <button onclick="alert('قريبًا ⭐')">⭐ المستوى الأعلى</button>
+
+    <!-- لعبة الحساب -->
+    <div class="game" id="mathGame">
+        <h3>كم ناتج الجمع؟</h3>
+        <div id="question" style="font-size:22px;margin:10px;"></div>
+        <input type="number" id="answer" placeholder="اكتب الإجابة">
+        <br><br>
+        <button onclick="checkAnswer()">تحقق</button>
+        <div id="result" style="margin-top:10px;font-size:18px;"></div>
     </div>
 
-    <input type="number" id="answer" placeholder="اكتب الجواب هنا">
-
-    <button onclick="check()">تحقّق ✅</button>
-    <button onclick="newGame()">لعبة جديدة 🔄</button>
-
-    <div class="result" id="result"></div>
-
-    <footer>
+    <div class="footer">
         © 2025 Riham – All Rights Reserved
-    </footer>
+    </div>
+
 </div>
 
 <script>
-let a, b;
+let a,b;
 
-function newGame() {
-    a = Math.floor(Math.random() * 10);
-    b = Math.floor(Math.random() * 10);
-
-    document.getElementById("num1").innerText = a;
-    document.getElementById("num2").innerText = b;
-    document.getElementById("answer").value = "";
-    document.getElementById("result").innerHTML = "";
+function showMath(){
+    document.getElementById("mathGame").style.display="block";
+    newQuestion();
 }
 
-function check() {
+function newQuestion(){
+    a = Math.floor(Math.random()*10);
+    b = Math.floor(Math.random()*10);
+    document.getElementById("question").innerText = a + " + " + b + " = ؟";
+    document.getElementById("answer").value="";
+    document.getElementById("result").innerText="";
+}
+
+function checkAnswer(){
     let user = document.getElementById("answer").value;
     let result = document.getElementById("result");
 
-    if (user === "") {
-        result.innerHTML = "✋ اكتب الجواب أولاً";
-        result.style.color = "#f58220";
-        return;
-    }
-
-    if (parseInt(user) === a + b) {
-        result.innerHTML = "🎉 ممتاز! إجابة صحيحة";
-        result.style.color = "green";
-    } else {
-        result.innerHTML = "❌ خطأ، حاول مرة ثانية";
-        result.style.color = "red";
+    if(user == a+b){
+        result.innerText = "🎉 شاطر! إجابة صحيحة";
+        result.style.color="green";
+        setTimeout(newQuestion,1000);
+    }else{
+        result.innerText = "❌ حاول مرة ثانية";
+        result.style.color="red";
     }
 }
-
-newGame();
 </script>
 
 </body>
