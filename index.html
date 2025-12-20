@@ -1,72 +1,131 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>تعليم بذكاء</title>
 
 <style>
 body{
-  background:#4facfe;
+  margin:0;
+  height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
-  font-family:Tahoma;
-  direction:rtl;
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  font-family:Tahoma,Arial;
 }
 
-.box{
-  background:#f4a261;
+.app{
+  width:320px;
+  background:#f9c74f;
+  border-radius:20px;
   padding:20px;
-  border-radius:15px;
-  width:300px;
   text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+h1{
+  color:#fff;
+  margin:5px 0 15px;
 }
 
 button{
   width:100%;
+  padding:12px;
   margin:6px 0;
-  padding:10px;
   border:none;
-  border-radius:10px;
-  background:#1e88e5;
-  color:white;
+  border-radius:12px;
+  background:#277da1;
+  color:#fff;
   font-size:16px;
   cursor:pointer;
 }
 
-#result{
+button:active{
+  transform:scale(0.97);
+}
+
+.screen{
+  margin-top:12px;
+  background:#fff;
+  border-radius:12px;
+  padding:15px;
+  min-height:80px;
+  font-size:18px;
+}
+
+.footer{
   margin-top:10px;
-  background:white;
-  padding:10px;
-  border-radius:8px;
+  font-size:12px;
+  color:#fff;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-  <h2>تعليم بذكاء</h2>
+<div class="app">
+  <h1>تعليم بذكاء 🎓</h1>
 
-  <button onclick="mathGame()">لعبة الحساب</button>
-  <button onclick="lettersGame()">لعبة الحروف</button>
-  <button onclick="colorsGame()">لعبة الألوان</button>
+  <button onclick="showMath()">➕ لعبة الحساب</button>
+  <button onclick="showLetters()">🔤 لعبة الحروف</button>
+  <button onclick="showColors()">🎨 لعبة الألوان</button>
+  <button onclick="showLevels()">⭐ المستويات</button>
 
-  <div id="result">اضغطي زر</div>
+  <div class="screen" id="screen">
+    اضغطي على أي لعبة 👆
+  </div>
+
+  <div class="footer">© 2026 Rehab</div>
 </div>
 
 <script>
-function mathGame(){
-  document.getElementById("result").innerText = "٢ + ٣ = ٥";
+const screen = document.getElementById("screen");
+
+function showMath(){
+  const a = Math.floor(Math.random()*10);
+  const b = Math.floor(Math.random()*10);
+  screen.innerHTML = `
+    🧮<br>
+    ${a} + ${b} = ؟<br>
+    <b>الإجابة: ${a+b}</b>
+  `;
 }
 
-function lettersGame(){
-  document.getElementById("result").innerText = "الحرف: أ";
+function showLetters(){
+  const letters = ["أ","ب","ت","ث","ج","ح","خ"];
+  const l = letters[Math.floor(Math.random()*letters.length)];
+  screen.innerHTML = `
+    🔤<br>
+    الحرف هو:<br>
+    <span style="font-size:30px"><b>${l}</b></span>
+  `;
 }
 
-function colorsGame(){
-  document.getElementById("result").innerText = "اللون: أحمر";
+function showColors(){
+  const colors = [
+    {name:"أحمر",code:"red"},
+    {name:"أزرق",code:"blue"},
+    {name:"أخضر",code:"green"},
+    {name:"أصفر",code:"gold"}
+  ];
+  const c = colors[Math.floor(Math.random()*colors.length)];
+  screen.innerHTML = `
+    🎨<br>
+    اللون:<br>
+    <div style="margin:10px auto;width:60px;height:30px;background:${c.code};border-radius:6px"></div>
+    <b>${c.name}</b>
+  `;
+}
+
+let level = 1;
+function showLevels(){
+  screen.innerHTML = `
+    ⭐ المستوى الحالي<br>
+    <b>Level ${level}</b>
+  `;
+  level++;
 }
 </script>
 
