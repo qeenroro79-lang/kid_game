@@ -1,98 +1,145 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kids Game</title>
+<title>تعليم بذكاء</title>
 <style>
 body{
   margin:0;
-  font-family:Arial, sans-serif;
-  background:#6a11cb;
+  font-family: Tahoma;
+  background: linear-gradient(135deg,#1e90ff,#7b2cbf);
   display:flex;
   justify-content:center;
   align-items:center;
   height:100vh;
 }
-.app{
-  background:#f9d976;
+.card{
+  background:linear-gradient(#f7b733,#fc4a1a);
   width:320px;
-  border-radius:20px;
   padding:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,.3);
+  border-radius:20px;
   text-align:center;
+  color:#222;
 }
-h1{margin:0 0 10px}
+h1{margin:10px 0}
 button{
   width:100%;
   padding:12px;
   margin:8px 0;
-  font-size:18px;
   border:none;
   border-radius:12px;
-  background:#1e3a8a;
+  font-size:16px;
+  cursor:pointer;
+  background:#1e6fd9;
   color:white;
+}
+#game{
+  margin-top:15px;
+  background:white;
+  padding:10px;
+  border-radius:10px;
+  min-height:80px;
+}
+.choice{
+  display:inline-block;
+  padding:10px 15px;
+  margin:5px;
+  background:#eee;
+  border-radius:8px;
   cursor:pointer;
 }
-#game{background:white;border-radius:12px;padding:12px;margin-top:10px;min-height:80px}
-.choice{background:#e5e7eb;margin:6px;padding:10px;border-radius:8px;cursor:pointer}
-.choice:hover{background:#c7d2fe}
+.color{
+  width:50px;
+  height:50px;
+  display:inline-block;
+  margin:5px;
+  border-radius:8px;
+  cursor:pointer;
+}
 </style>
 </head>
-<body>
 
-<div class="app">
-<h1>🎮 Kids Game</h1>
+<body>
+<div class="card">
+<h1>تعليم بذكاء 🔍</h1>
+<p>منصة تعليمية تفاعلية للأطفال</p>
 
 <button onclick="mathGame()">➕ لعبة الحساب</button>
-<button onclick="lettersGame()">🔤 لعبة الحروف</button>
-<button onclick="colorsGame()">🎨 لعبة الألوان</button>
+<button onclick="letterGame()">🔤 لعبة الحروف</button>
+<button onclick="colorGame()">🎨 لعبة الألوان</button>
 
-<div id="game">اضغطي على لعبة</div>
+<div id="game">اختر لعبة 👆</div>
 </div>
 
 <script>
+function speak(text){
+  const msg = new SpeechSynthesisUtterance(text);
+  msg.lang="ar-SA";
+  speechSynthesis.speak(msg);
+}
+
 function mathGame(){
-  const a=2,b=3;
-  const game=document.getElementById('game');
-  game.innerHTML=<p>كم ${a}+${b}؟</p>;
-  [4,5,6].forEach(n=>{
-    const d=document.createElement('div');
-    d.className='choice';
-    d.innerText=n;
-    d.onclick=()=>{
-      alert(n===5?'✅ صح شاطرة':'❌ خطأ');
-    };
-    game.appendChild(d);
-  });
+  const a=Math.floor(Math.random()*5)+1;
+  const b=Math.floor(Math.random()*5)+1;
+  const answer=a+b;
+  let html=<h3>${a} + ${b} = ؟</h3>;
+  for(let i=answer-1;i<=answer+1;i++){
+    html+=<span class="choice" onclick="check(${i},${answer})">${i}</span>;
+  }
+  document.getElementById("game").innerHTML=html;
+  speak("احسب الناتج");
 }
 
-function lettersGame(){
-  const game=document.getElementById('game');
-  game.innerHTML='<p>اختاري حرف A</p>';
-  ['A','B','C'].forEach(l=>{
-    const d=document.createElement('div');
-    d.className='choice';
-    d.innerText=l;
-    d.onclick=()=>{alert(l==='A'?'✅ ممتاز':'❌ جربي ثانية')};
-    game.appendChild(d);
-  });
+function check(v,a){
+  if(v===a){
+    speak("أحسنت");
+    alert("✔️ إجابة صحيحة");
+  }else{
+    speak("حاول مرة أخرى");
+    alert("❌ خطأ");
+  }
 }
 
-function colorsGame(){
-  const game=document.getElementById('game');
-  game.innerHTML='<p>اختاري اللون الأحمر</p>';
-  ['red','blue','green'].forEach(c=>{
-    const d=document.createElement('div');
-    d.className='choice';
-    d.style.background=c;
-    d.style.color='white';
-    d.innerText=c;
-    d.onclick=()=>{alert(c==='red'?'🎉 صح':'❌ لا')};
-    game.appendChild(d);
+function letterGame(){
+  const letters=["أ","ب","ت","ث","ج"];
+  const l=letters[Math.floor(Math.random()*letters.length)];
+  document.getElementById("game").innerHTML=
+  `<h3>اضغط على الحرف</h3>
+   ${letters.map(x=><span class="choice" onclick="letter('${x}','${l}')">${x}</span>).join("")}`;
+  speak("اختر الحرف");
+}
+
+function letter(v,c){
+  if(v===c){
+    speak("صحيح");
+    alert("✔️ ممتاز");
+  }else{
+    speak("خطأ");
+    alert("❌ حاول");
+  }
+}
+
+function colorGame(){
+  const colors=["red","green","blue"];
+  const names={red:"أحمر",green:"أخضر",blue:"أزرق"};
+  const c=colors[Math.floor(Math.random()*3)];
+  let html=<h3>اضغط اللون ${names[c]}</h3>;
+  colors.forEach(x=>{
+    html+=<div class="color" style="background:${x}" onclick="color('${x}','${c}')"></div>;
   });
+  document.getElementById("game").innerHTML=html;
+  speak("اختر اللون");
+}
+
+function color(v,c){
+  if(v===c){
+    speak("أحسنت");
+    alert("✔️ صحيح");
+  }else{
+    speak("خطأ");
+    alert("❌ خطأ");
+  }
 }
 </script>
-
 </body>
 </html>
