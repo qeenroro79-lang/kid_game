@@ -8,166 +8,154 @@
 <style>
 body{
   margin:0;
-  font-family: Arial;
-  background: linear-gradient(135deg,#5f2c82,#49a09d);
+  font-family:Tahoma;
+  background:linear-gradient(135deg,#6a11cb,#2575fc);
   display:flex;
   justify-content:center;
   align-items:center;
-  min-height:100vh;
-  direction:rtl;
+  height:100vh;
 }
-
 .card{
-  background: linear-gradient(135deg,#f7b733,#fc4a1a);
-  width:90%;
-  max-width:420px;
-  padding:25px;
-  border-radius:30px;
+  background:#f6c453;
+  width:320px;
+  padding:20px;
+  border-radius:20px;
   text-align:center;
-  color:white;
-  box-shadow:0 15px 30px rgba(0,0,0,.3);
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
-
+h1{margin:0}
 button{
   width:100%;
-  padding:14px;
+  padding:12px;
   margin:8px 0;
   border:none;
-  border-radius:15px;
-  font-size:18px;
-  background:#1e3c72;
+  border-radius:12px;
+  font-size:16px;
+  background:#1e40af;
   color:white;
+  cursor:pointer;
 }
-
-button:active{transform:scale(.97)}
-
+button:hover{background:#1e3a8a}
 .hidden{display:none}
-
 .box{
   background:white;
-  color:#333;
-  border-radius:15px;
   padding:15px;
-  margin-top:10px;
-}
-
-.color-box{
-  width:80px;
-  height:80px;
   border-radius:15px;
-  margin:10px auto;
+}
+.color-box{
+  width:100%;
+  height:80px;
+  border-radius:10px;
+  margin:10px 0;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="card" id="menu">
+  <h1>تعليم بذكاء 🎈</h1>
+  <p>منصة تعليمية تفاعلية للأطفال</p>
 
-<h2>🎈 تعليم بذكاء</h2>
-<p>مستوى: <span id="level">1</span></p>
-
-<button onclick="show('math')">➕ لعبة الحساب</button>
-<button onclick="show('letters')">🔤 لعبة الحروف</button>
-<button onclick="show('colors')">🎨 لعبة الألوان</button>
-<button onclick="home()">🏠 الرجوع</button>
+  <button onclick="openGame('math')">➕ لعبة الحساب</button>
+  <button onclick="openGame('letters')">🔤 لعبة الحروف</button>
+  <button onclick="openGame('colors')">🎨 لعبة الألوان</button>
+  <button onclick="openGame('levels')">⭐ المستويات</button>
+</div>
 
 <!-- لعبة الحساب -->
-<div id="math" class="box hidden">
-  <p id="mathQ"></p>
-  <input id="mathA" type="number">
-  <button onclick="checkMath()">تحقق</button>
+<div class="card hidden" id="math">
+  <h2>لعبة الحساب</h2>
+  <div class="box">
+    <p id="question"></p>
+    <input id="answer" type="number" style="width:100%;padding:8px">
+    <button onclick="checkMath()">تحقق</button>
+  </div>
+  <button onclick="back()">رجوع</button>
 </div>
 
 <!-- لعبة الحروف -->
-<div id="letters" class="box hidden">
-  <p id="letterQ"></p>
-  <input id="letterA">
-  <button onclick="checkLetter()">تحقق</button>
+<div class="card hidden" id="letters">
+  <h2>لعبة الحروف</h2>
+  <div class="box">
+    <p id="letter"></p>
+    <button onclick="nextLetter()">التالي</button>
+  </div>
+  <button onclick="back()">رجوع</button>
 </div>
 
 <!-- لعبة الألوان -->
-<div id="colors" class="box hidden">
-  <div id="colorBox" class="color-box"></div>
-  <p id="colorQ"></p>
-  <button onclick="checkColor('أحمر')">أحمر</button>
-  <button onclick="checkColor('أزرق')">أزرق</button>
-  <button onclick="checkColor('أخضر')">أخضر</button>
+<div class="card hidden" id="colors">
+  <h2>لعبة الألوان</h2>
+  <div class="box">
+    <div class="color-box" id="colorBox"></div>
+    <button onclick="nextColor()">غيّر اللون</button>
+  </div>
+  <button onclick="back()">رجوع</button>
 </div>
 
+<!-- المستويات -->
+<div class="card hidden" id="levels">
+  <h2>المستوى ⭐</h2>
+  <div class="box">
+    <p id="levelText">المستوى الحالي: 1</p>
+  </div>
+  <button onclick="back()">رجوع</button>
 </div>
 
 <script>
 let level=1;
 let a,b;
-let letter;
-let color;
+let letters=["أ","ب","ت","ث","ج","ح","خ"];
+let colors=["red","blue","green","yellow","purple"];
+
+function openGame(id){
+  document.getElementById("menu").classList.add("hidden");
+  document.getElementById(id).classList.remove("hidden");
+  if(id==="math") newMath();
+  if(id==="letters") nextLetter();
+  if(id==="colors") nextColor();
+}
+
+function back(){
+  document.querySelectorAll(".card").forEach(c=>c.classList.add("hidden"));
+  document.getElementById("menu").classList.remove("hidden");
+}
 
 function speak(text){
-  let msg=new SpeechSynthesisUtterance(text);
-  msg.lang="ar-SA";
-  speechSynthesis.speak(msg);
+  let s=new SpeechSynthesisUtterance(text);
+  s.lang="ar-SA";
+  speechSynthesis.speak(s);
 }
 
-function success(){
-  level++;
-  document.getElementById("level").innerText=level;
-  speak("شاطر ممتاز");
-}
-
-function show(id){
-  home();
-  document.getElementById(id).classList.remove("hidden");
-
-  if(id==="math") newMath();
-  if(id==="letters") newLetter();
-  if(id==="colors") newColor();
-}
-
-function home(){
-  document.querySelectorAll(".box").forEach(b=>b.classList.add("hidden"));
-}
-
-/* الحساب */
 function newMath(){
   a=Math.floor(Math.random()*10);
   b=Math.floor(Math.random()*10);
-  document.getElementById("mathQ").innerText=${a} + ${b} = ؟;
+  document.getElementById("question").innerText=${a} + ${b} = ؟;
+  document.getElementById("answer").value="";
 }
+
 function checkMath(){
-  if(Number(mathA.value)===a+b){
-    success(); newMath();
-  } else speak("حاول مرة ثانية");
+  if(+answer.value===a+b){
+    level++;
+    document.getElementById("levelText").innerText="المستوى الحالي: "+level;
+    speak("شاطر");
+    newMath();
+  }else{
+    speak("حاول مرة ثانية");
+  }
 }
 
-/* الحروف */
-function newLetter(){
-  const letters=["أ","ب","ت","ث","ج"];
-  letter=letters[Math.floor(Math.random()*letters.length)];
-  document.getElementById("letterQ").innerText=اكتب الحرف: ${letter};
-}
-function checkLetter(){
-  if(letterA.value===letter){
-    success(); newLetter();
-  } else speak("غلط");
+function nextLetter(){
+  let l=letters[Math.floor(Math.random()*letters.length)];
+  document.getElementById("letter").innerText=l;
+  speak(l);
 }
 
-/* الألوان */
-function newColor(){
-  const colors=[
-    {n:"أحمر",c:"red"},
-    {n:"أزرق",c:"blue"},
-    {n:"أخضر",c:"green"}
-  ];
-  let r=colors[Math.floor(Math.random()*3)];
-  color=r.n;
-  document.getElementById("colorBox").style.background=r.c;
-  document.getElementById("colorQ").innerText="اختر اللون الصحيح";
-}
-function checkColor(c){
-  if(c===color){
-    success(); newColor();
-  } else speak("خطأ");
+function nextColor(){
+  let c=colors[Math.floor(Math.random()*colors.length)];
+  document.getElementById("colorBox").style.background=c;
+  speak(c);
 }
 </script>
 
