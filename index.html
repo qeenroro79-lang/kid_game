@@ -6,108 +6,67 @@
 
 <style>
 body{
-  margin:0;
-  font-family: Tahoma;
-  background: linear-gradient(135deg,#4facfe,#8f44fd);
+  background:#4facfe;
   display:flex;
   justify-content:center;
   align-items:center;
   height:100vh;
+  font-family:Tahoma;
   direction:rtl;
 }
 
-.card{
+.box{
   background:#f4a261;
-  padding:25px;
-  border-radius:20px;
-  width:320px;
+  padding:20px;
+  border-radius:15px;
+  width:300px;
   text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,.3);
-}
-
-h1{
-  margin:0;
-  color:white;
-}
-
-p{
-  color:#fff;
-  margin-bottom:20px;
 }
 
 button{
   width:100%;
-  padding:12px;
-  margin:8px 0;
+  margin:6px 0;
+  padding:10px;
   border:none;
-  border-radius:12px;
+  border-radius:10px;
   background:#1e88e5;
   color:white;
   font-size:16px;
   cursor:pointer;
 }
 
-button:hover{
-  background:#1565c0;
-}
-
-#gameArea{
-  margin-top:15px;
+#result{
+  margin-top:10px;
   background:white;
-  border-radius:12px;
-  padding:15px;
-  min-height:60px;
+  padding:10px;
+  border-radius:8px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
-  <h1>تعليم بذكاء 🔍</h1>
-  <p>منصة تعليمية تفاعلية للأطفال</p>
+<div class="box">
+  <h2>تعليم بذكاء</h2>
 
-  <button onclick="toggleSound()">🔊 الصوت</button>
-  <button onclick="mathGame()">➕ لعبة الحساب</button>
-  <button onclick="lettersGame()">🔤 لعبة الحروف</button>
-  <button onclick="colorsGame()">🎨 لعبة الألوان</button>
-  <button onclick="levelsGame()">⭐ المستويات</button>
+  <button onclick="mathGame()">لعبة الحساب</button>
+  <button onclick="lettersGame()">لعبة الحروف</button>
+  <button onclick="colorsGame()">لعبة الألوان</button>
 
-  <div id="gameArea">👆 اختر لعبة</div>
+  <div id="result">اضغطي زر</div>
 </div>
 
 <script>
-let soundOn = true;
-
-function toggleSound(){
-  soundOn = !soundOn;
-  alert(soundOn ? "🔊 الصوت شغال" : "🔇 الصوت متوقف");
-}
-
 function mathGame(){
-  const a = Math.floor(Math.random()*10);
-  const b = Math.floor(Math.random()*10);
-  document.getElementById("gameArea").innerHTML =
-    🧮 كم ناتج <b>${a} + ${b}</b> ؟;
+  document.getElementById("result").innerText = "٢ + ٣ = ٥";
 }
 
 function lettersGame(){
-  const letters = ["أ","ب","ت","ث","ج","ح","خ"];
-  const random = letters[Math.floor(Math.random()*letters.length)];
-  document.getElementById("gameArea").innerHTML =
-    🔤 الحرف هو: <b>${random}</b>;
+  document.getElementById("result").innerText = "الحرف: أ";
 }
 
 function colorsGame(){
-  const colors = ["أحمر","أزرق","أخضر","أصفر"];
-  const random = colors[Math.floor(Math.random()*colors.length)];
-  document.getElementById("gameArea").innerHTML =
-    🎨 اللون هو: <b>${random}</b>;
-}
-
-function levelsGame(){
-  document.getElementById("gameArea").innerHTML =
-    "⭐ المستوى الحالي: 1";
+  document.getElementById("result").innerText = "اللون: أحمر";
 }
 </script>
 
