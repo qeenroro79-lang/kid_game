@@ -1,111 +1,202 @@
- <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>لعبة الأطفال</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>تعليم بذكاء | ألعاب تعليمية للأطفال</title>
 
 <style>
-body{
-  font-family: Tahoma;
-  background:#d43b0d;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  margin:0;
+body {
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    background: linear-gradient(135deg, #260150, #500832);
+    margin: 0;
+    padding: 0;
+    text-align: center;
 }
 
-.box{
-  background:#f3ec88;
-  width:300px;
-  padding:20px;
-  border-radius:15px;
-  text-align:center;
-  box-shadow:0 0 10px rgba(0,0,0,.2);
+.page {
+    display: none;
+    min-height: 100vh;
+    padding: 20px;
 }
 
-button{
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-  border:none;
-  border-radius:10px;
-  background:#d67c05;
-  color:#fff;
-  font-size:16px;
-  cursor:pointer;
+.active { display: block; }
+
+.card {
+    background: rgb(161, 112, 5);
+    padding: 28px;
+    border-radius: 25px;
+    max-width: 380px;
+    width: 92%;
+    margin: auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 
-#game{
-  margin-top:15px;
-  font-size:18px;
+h1 { font-size: 28px; color:#571014; }
+h2 { font-size: 24px; color:#571014; }
+
+button {
+    width: 100%;
+    padding: 16px;
+    margin-top: 12px;
+    font-size: 20px;
+    border-radius: 14px;
+    border: none;
+    background: #220a4e;
+    color: white;
+    cursor: pointer;
 }
 
-.color{
-  height:40px;
-  border-radius:8px;
-  margin:5px 0;
+.back { background:#3a0323; }
+
+input {
+    width: 100%;
+    padding: 14px;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.numbers { font-size: 36px; margin: 15px 0; }
+.letters { font-size: 90px; }
+
+.color-box {
+    width: 120px;
+    height: 120px;
+    margin: 15px auto;
+    border-radius: 20px;
+}
+
+.result {
+    margin-top: 12px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #9e8f8f;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-  <h2>🎈 ألعاب الأطفال</h2>
+<!-- الصفحة الرئيسية -->
+<div id="home" class="page active">
+    <div class="card">
+        <h1>🎈 تعليم بذكاء</h1>
+        <p>منصة تعليمية عربية للأطفال</p>
 
-  <button onclick="mathGame()">➕ لعبة الحساب</button>
-  <button onclick="colorGame()">🎨 لعبة الألوان</button>
-  <button onclick="letterGame()">🔤 لعبة الحروف</button>
+        <button onclick="showPage('math')">➕ لعبة الحساب</button>
+        <button onclick="showPage('letters')">🔤 لعبة الحروف</button>
+        <button onclick="showPage('colors')">🎨 لعبة الألوان</button>
 
-  <div id="game">اختار لعبة</div>
+        <div class="footer">
+            © 2026 Rehab Al Hammadi – مشروع تعليمي
+        </div>
+    </div>
+</div>
+
+<!-- لعبة الحساب -->
+<div id="math" class="page">
+    <div class="card">
+        <h2>➕ لعبة الحساب</h2>
+        <div class="numbers">
+            <span id="num1"></span> + <span id="num2"></span>
+        </div>
+
+        <input type="number" id="answer" placeholder="اكتب الإجابة">
+
+        <button onclick="checkMath()">تحقّق</button>
+        <div class="result" id="mathResult"></div>
+
+        <button class="back" onclick="showPage('home')">⬅ رجوع</button>
+    </div>
+</div>
+
+<!-- لعبة الحروف -->
+<div id="letters" class="page">
+    <div class="card">
+        <h2>🔤 لعبة الحروف</h2>
+        <div class="letters" id="letter">أ</div>
+
+        <button onclick="newLetter()">حرف جديد</button>
+        <button class="back" onclick="showPage('home')">⬅ رجوع</button>
+    </div>
+</div>
+
+<!-- لعبة الألوان -->
+<div id="colors" class="page">
+    <div class="card">
+        <h2>🎨 لعبة الألوان</h2>
+
+        <div class="color-box" id="colorBox"></div>
+        <div class="result" id="colorName"></div>
+
+        <button onclick="newColor()">لون جديد</button>
+        <button class="back" onclick="showPage('home')">⬅ رجوع</button>
+    </div>
 </div>
 
 <script>
-// ===== لعبة الحساب =====
-function mathGame(){
-  let a = Math.floor(Math.random()*10);
-  let b = Math.floor(Math.random()*10);
-  document.getElementById("game").innerHTML =
-    a + " + " + b + " = ؟<br><br>" +
-    "<input id='ans' type='number'><br><br>" +
-    "<button onclick='checkMath("+a+","+b+")'>تحقق</button>";
+/* التنقل بين الصفحات */
+function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(page).classList.add('active');
 }
 
-function checkMath(a,b){
-  let user = document.getElementById("ans").value;
-  if(user == a+b){
-    document.getElementById("game").innerHTML = "👏 إجابة صحيحة";
-  }else{
-    document.getElementById("game").innerHTML = "❌ حاول مرة أخرى";
-  }
+/* لعبة الحساب */
+let a, b;
+
+function newMath() {
+    a = Math.floor(Math.random() * 10);
+    b = Math.floor(Math.random() * 10);
+    document.getElementById("num1").innerText = a;
+    document.getElementById("num2").innerText = b;
+    document.getElementById("answer").value = "";
+    document.getElementById("mathResult").innerText = "";
 }
 
-// ===== لعبة الألوان =====
-function colorGame(){
-  document.getElementById("game").innerHTML =
-    "اضغط على اللون الأحمر" +
-    "<div class='color' style='background:red' onclick='right()'></div>" +
-    "<div class='color' style='background:blue' onclick='wrong()'></div>" +
-    "<div class='color' style='background:green' onclick='wrong()'></div>";
+function checkMath() {
+    let user = document.getElementById("answer").value;
+    let res = document.getElementById("mathResult");
+
+    if (user == a + b) {
+        res.innerText = "👏 ممتاز!";
+        res.style.color = "green";
+        newMath();
+    } else {
+        res.innerText = "❌ حاول مرة ثانية";
+        res.style.color = "red";
+    }
 }
 
-function right(){
-  document.getElementById("game").innerHTML = "🎉 ممتاز";
+/* لعبة الحروف */
+let letters = ["أ","ب","ت","ث","ج","ح","خ","د","ر"];
+function newLetter() {
+    let r = Math.floor(Math.random() * letters.length);
+    document.getElementById("letter").innerText = letters[r];
 }
 
-function wrong(){
-  document.getElementById("game").innerHTML = "❌ خطأ";
+/* لعبة الألوان */
+let colors = [
+    {name:"أحمر", value:"red"},
+    {name:"أخضر", value:"green"},
+    {name:"أزرق", value:"blue"},
+    {name:"أصفر", value:"yellow"}
+];
+function newColor() {
+    let r = Math.floor(Math.random() * colors.length);
+    document.getElementById("colorBox").style.background = colors[r].value;
+    document.getElementById("colorName").innerText = colors[r].name;
 }
 
-// ===== لعبة الحروف =====
-function letterGame(){
-  let letters = ['ح','أ','ب','ت','ث','ج'];
-  let l = letters[Math.floor(Math.random()*letters.length)];
-  document.getElementById("game").innerHTML =
-    "اضغط على الحرف:<br><br>" +
-    "<button onclick='right()'>"+l+"</button>";
-}
+/* تشغيل أولي */
+newMath();
+newColor();
 </script>
 
 </body>
