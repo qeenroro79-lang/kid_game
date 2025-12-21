@@ -1,140 +1,148 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>تعليم بذكاء – لعبة الأطفال</title>
-  <style>
-    *{box-sizing:border-box;font-family:Tahoma,Arial}
-    body{
-      margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-      background:linear-gradient(135deg,#4facfe,#8e44ad);
-    }
-    .card{
-      width:340px;max-width:92%;background:#f7c873;border-radius:18px;
-      padding:18px;box-shadow:0 10px 25px rgba(0,0,0,.25);
-      text-align:center
-    }
-    h1{margin:6px 0 2px;font-size:24px}
-    p{margin:0 0 12px;font-size:13px;opacity:.9}
-    .btn{
-      width:100%;padding:12px;margin:8px 0;border:none;border-radius:12px;
-      background:#2e6cf6;color:#fff;font-size:16px;cursor:pointer
-    }
-    .btn:hover{opacity:.9}
-    .top{display:flex;gap:8px;margin-bottom:10px}
-    .small{flex:1;background:#34495e;font-size:13px}
-    .game{display:none;margin-top:10px}
-    .box{background:#fff;border-radius:12px;padding:12px;margin-top:8px}
-    input{
-      width:80px;padding:6px;font-size:16px;text-align:center;border-radius:8px;border:1px solid #ccc
-    }
-    .colors{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
-    .color{
-      height:60px;border-radius:10px;cursor:pointer
-    }
-    .msg{margin-top:8px;font-weight:bold}
-    footer{margin-top:10px;font-size:11px;opacity:.7}
-  </style>
+<meta charset="UTF-8">
+<title>تعليم بذكاء</title>
+<style>
+body{
+  margin:0;
+  font-family:Tahoma;
+  background:linear-gradient(135deg,#1e3c72,#2a5298);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  color:#fff;
+}
+.card{
+  background:linear-gradient(180deg,#f9c74f,#f9844a);
+  width:340px;
+  border-radius:20px;
+  padding:20px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.3);
+}
+h1{margin:5px 0}
+p{margin:5px 0 15px}
+button{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border:none;
+  border-radius:12px;
+  background:#2a6fdb;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+button:hover{opacity:.9}
+#game{
+  background:#fff;
+  color:#000;
+  border-radius:12px;
+  padding:15px;
+  margin-top:10px;
+  min-height:120px;
+}
+.option{
+  background:#e9ecef;
+  margin:5px;
+  padding:10px;
+  border-radius:10px;
+  cursor:pointer;
+}
+.option:hover{background:#dee2e6}
+.color{
+  height:40px;
+  border-radius:8px;
+}
+.footer{
+  font-size:12px;
+  margin-top:10px;
+  opacity:.8;
+}
+</style>
 </head>
+
 <body>
-  <div class="card">
-    <h1>تعليم بذكاء</h1>
-    <p>لعبة حساب وألوان للأطفال</p>
 
-    <div class="top">
-      <button class="btn small" onclick="showHome()">الرئيسية</button>
-      <button class="btn small" onclick="toggleSound()" id="soundBtn">🔊 الصوت مفعل</button>
-    </div>
+<div class="card">
+  <h1>🧠 تعليم بذكاء</h1>
+  <p>منصة تعليمية تفاعلية للأطفال</p>
 
-    <button class="btn" onclick="openMath()">➕ لعبة الحساب</button>
-    <button class="btn" onclick="openColors()">🎨 لعبة الألوان</button>
+  <button onclick="toggleSound()">🔊 الصوت: <span id="soundState">يعمل</span></button>
 
-    <!-- لعبة الحساب -->
-    <div id="math" class="game">
-      <div class="box">
-        <div id="question"></div>
-        <input id="answer" type="number" />
-        <div>
-          <button class="btn" onclick="checkMath()">تحقق</button>
-        </div>
-        <div id="mathMsg" class="msg"></div>
-      </div>
-    </div>
+  <button onclick="mathGame()">➕ لعبة الحساب</button>
+  <button onclick="letterGame()">🔤 لعبة الحروف</button>
+  <button onclick="colorGame()">🎨 لعبة الألوان</button>
 
-    <!-- لعبة الألوان -->
-    <div id="colors" class="game">
-      <div class="box">
-        <div>اختر اللون: <b id="targetColor"></b></div>
-        <div class="colors" id="colorGrid"></div>
-        <div id="colorMsg" class="msg"></div>
-      </div>
-    </div>
+  <div id="game">اختر لعبة 👆</div>
 
-    <footer>Rehab Al Hammadi © 2026</footer>
-  </div>
+  <div class="footer">Rehab Al Hammadi © 2026</div>
+</div>
 
 <script>
-  let soundOn = true;
-  const correctSound = new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg');
-  const wrongSound = new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
+let soundOn=true;
+const audio=new Audio("https://www.soundjay.com/buttons/sounds/button-16.mp3");
 
-  function play(s){ if(soundOn) s.play(); }
-  function toggleSound(){ soundOn=!soundOn; document.getElementById('soundBtn').innerText = soundOn?'🔊 الصوت مفعل':'🔇 الصوت مكتوم'; }
+function playSound(){
+  if(soundOn){ audio.currentTime=0; audio.play(); }
+}
 
-  function hideAll(){ document.querySelectorAll('.game').forEach(g=>g.style.display='none'); }
-  function showHome(){ hideAll(); }
+function toggleSound(){
+  soundOn=!soundOn;
+  document.getElementById("soundState").innerText = soundOn ? "يعمل" : "مغلق";
+}
 
-  // ===== لعبة الحساب =====
-  let a,b;
-  function openMath(){ hideAll(); document.getElementById('math').style.display='block'; newQuestion(); }
-  function newQuestion(){
-    a = Math.floor(Math.random()*10)+1;
-    b = Math.floor(Math.random()*10)+1;
-    document.getElementById('question').innerText = ${a} + ${b} = ؟;
-    document.getElementById('answer').value='';
-    document.getElementById('mathMsg').innerText='';
+function mathGame(){
+  playSound();
+  const a=Math.floor(Math.random()*5)+1;
+  const b=Math.floor(Math.random()*5)+1;
+  const correct=a+b;
+  let html=<h3>${a} + ${b} = ؟</h3>;
+  for(let i=0;i<3;i++){
+    let val = i==0 ? correct : Math.floor(Math.random()*10);
+    html+=<div class="option" onclick="check(${val},${correct})">${val}</div>;
   }
-  function checkMath(){
-    const val = Number(document.getElementById('answer').value);
-    if(val === a+b){
-      document.getElementById('mathMsg').innerText='أحسنت 👏'; play(correctSound); newQuestion();
-    } else {
-      document.getElementById('mathMsg').innerText='حاول مرة أخرى 🙂'; play(wrongSound);
-    }
-  }
+  document.getElementById("game").innerHTML=html;
+}
 
-  // ===== لعبة الألوان =====
-  const colors = [
-    {name:'أحمر',value:'#e74c3c'},
-    {name:'أزرق',value:'#3498db'},
-    {name:'أخضر',value:'#2ecc71'},
-    {name:'أصفر',value:'#f1c40f'},
-    {name:'برتقالي',value:'#e67e22'},
-    {name:'بنفسجي',value:'#9b59b6'},
+function letterGame(){
+  playSound();
+  const letters=["أ","ب","ت","ث","ج","ح"];
+  const l=letters[Math.floor(Math.random()*letters.length)];
+  document.getElementById("game").innerHTML=
+    `<h3>اضغط على الحرف:</h3>
+     <div class="option" onclick="alert('أحسنت 🎉')">${l}</div>`;
+}
+
+function colorGame(){
+  playSound();
+  const colors=[
+    {name:"أحمر",code:"red"},
+    {name:"أزرق",code:"blue"},
+    {name:"أخضر",code:"green"}
   ];
-  let target;
-  function openColors(){ hideAll(); document.getElementById('colors').style.display='block'; buildColors(); }
-  function buildColors(){
-    target = colors[Math.floor(Math.random()*colors.length)];
-    document.getElementById('targetColor').innerText = target.name;
-    const grid = document.getElementById('colorGrid');
-    grid.innerHTML='';
-    colors.forEach(c=>{
-      const d=document.createElement('div');
-      d.className='color'; d.style.background=c.value;
-      d.onclick=()=>checkColor(c);
-      grid.appendChild(d);
-    });
-    document.getElementById('colorMsg').innerText='';
-  }
-  function checkColor(c){
-    if(c.name===target.name){
-      document.getElementById('colorMsg').innerText='صحيح 🎉'; play(correctSound); buildColors();
-    } else {
-      document.getElementById('colorMsg').innerText='خطأ ❌'; play(wrongSound);
-    }
-  }
+  const c=colors[Math.floor(Math.random()*colors.length)];
+  let html=<h3>اختر اللون: ${c.name}</h3>;
+  colors.forEach(col=>{
+    html+=`<div class="option color" 
+      style="background:${col.code}" 
+      onclick="checkColor('${col.name}','${c.name}')"></div>`;
+  });
+  document.getElementById("game").innerHTML=html;
+}
+
+function check(v,c){
+  playSound();
+  alert(v==c ? "صح ✅" : "خطأ ❌");
+}
+
+function checkColor(v,c){
+  playSound();
+  alert(v==c ? "ممتاز 🌈" : "حاول مرة أخرى");
+}
 </script>
+
 </body>
 </html>
